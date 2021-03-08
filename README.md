@@ -12,4 +12,4 @@ Technologies :
 - Axios
 - ...
 
-Création d'une application permettant de faire des quiz sur l'univers marvel, il y aura la possibilité de créer son compte avec mots de passe ect.
+Création d'une application permettant de faire des quiz sur l'univers marvel, il y aura la possibilité de créer son compte avec password & possibilités de se deconnecter ect.
