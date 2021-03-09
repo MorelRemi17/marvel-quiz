@@ -1,11 +1,12 @@
 import React, { useState, useContext } from "react";
+import { Link } from 'react-router-dom';
 import firebaseContext from '../Firebase/context';
 
 /*
 * useState vas nous permettre d'avoir une variable d'état avec son setter data seras ma valeur initial pour recuperer les elements dont j'ai besoin dans mon formulaire.
 */
 
-const Signup = () => {
+const Signup = ( props ) => {
 
   // * Quand le plus proche <firebase.Provider> au-dessus du composant est mis à jour, ce Hook va déclencher un rafraîchissement avec la value la plus récente passée au fournisseur firebaseContext.
 	const firebase = useContext(firebaseContext);
@@ -34,6 +35,7 @@ const Signup = () => {
   * On evite l'auto rafraichissement de la page avec le e.preventDefault(); 
   * Destructuring 
   * J'apelle ensuite mon objet firebase avec la methode singupUser avec les param email et password.
+  * props.history.push('/welcome') nous redirige vers welcome si la connexion c'est bien fait.
   * Quand l'inscription c'est bien passé le setLoginData({...data}) nous permet de vider les values pour recommencer, je vais ensuite gérer les erreurs grâce au .catch
   */ 
 	const handleSubmit = e => {
@@ -42,6 +44,7 @@ const Signup = () => {
 		firebase.signupUser(email, password)
 		.then(user => {
 			setLoginData({...data})
+      props.history.push('/welcome')
 		})
 		.catch(error => {
 			setError(error)
@@ -123,6 +126,9 @@ const Signup = () => {
               </div>
               {btn}
             </form>
+            <div className="linkContainer">
+              <Link className="simpleLink" to="/login">Déjà inscrit ? connectez vous !</Link>
+            </div>
           </div>
         </div>
       </div>
