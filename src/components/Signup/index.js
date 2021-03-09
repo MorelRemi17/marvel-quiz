@@ -1,10 +1,13 @@
 import React, { useState, useContext } from "react";
 import firebaseContext from '../Firebase/context';
 
-// ! 11 Penser a tout commenter 
+/*
+* useState vas nous permettre d'avoir une variable d'état avec son setter data seras ma valeur initial pour recuperer les elements dont j'ai besoin dans mon formulaire.
+*/
 
 const Signup = () => {
 
+  // * Quand le plus proche <firebase.Provider> au-dessus du composant est mis à jour, ce Hook va déclencher un rafraîchissement avec la value la plus récente passée au fournisseur firebaseContext.
 	const firebase = useContext(firebaseContext);
 
   const data = {
@@ -17,10 +20,22 @@ const Signup = () => {
   const [loginData, setLoginData] = useState(data);
 	const [ error, setError ]= useState ('')
 
+  /* 
+  * handleChange est un event qui vas nous permettre de mettre a jour les informations dans data, on pourras les target grâce a leurs ID et leurs value. 
+  * Ici je prend les infos qui sont actuelement dans mon state grâce au spread operator.
+  * [e.target.id] vas me permettre de cibler les id des differents inputs
+  * e.target.value vas nous permettre de mettre a jour les informations qui sont dans l'input 
+  */
   const handleChange = (e) => {
     setLoginData({ ...loginData, [e.target.id]: e.target.value });
   };
 
+  /*
+  * On evite l'auto rafraichissement de la page avec le e.preventDefault(); 
+  * Destructuring 
+  * J'apelle ensuite mon objet firebase avec la methode singupUser avec les param email et password.
+  * Quand l'inscription c'est bien passé le setLoginData({...data}) nous permet de vider les values pour recommencer, je vais ensuite gérer les erreurs grâce au .catch
+  */ 
 	const handleSubmit = e => {
 		e.preventDefault();
 		const { email, password } = loginData;
@@ -34,12 +49,10 @@ const Signup = () => {
 		})
 	};
 
+  // * cette variable nous sert a destructurer nos value dans nos input, sans cela nous devrions mettre : value={loginDatapseudo} ... 
   const { pseudo, email, password, confirmPassword } = loginData;
 
-  /*
-   * Si le bouton est vide ou l'adresse email ect on afficheras un boutton désactivé
-   */
-
+  //* Si le bouton est vide ou l'adresse email ect on afficheras un boutton désactivé
   const btn =
     pseudo === "" ||
     email === "" ||
@@ -50,7 +63,7 @@ const Signup = () => {
       <button>Inscription</button>
     );
 	
-	// Gestion des erreurs
+	// * Gestion des erreurs
 	const errorMsg = error !=='' && <span>{error.message}</span>
 
   return (
