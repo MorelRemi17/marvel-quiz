@@ -21,7 +21,8 @@ const Welcome = props => {
     return () => {
       listener()
     };
-  }, [ ])
+    // eslint-disable-next-line
+  }, [])
 
   // * Si notre userSession est null dans ce cas là on va faire patienter la personne avec un loader si ça n'est pas le cas je return ma div avec mes composants.
   return userSession === null ? (
