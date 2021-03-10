@@ -6,6 +6,7 @@ Technologies :
     - useRef
     - useEffect
     - useState
+    - useContext
     - Fragment
 - Firebase
 - Marvel API
