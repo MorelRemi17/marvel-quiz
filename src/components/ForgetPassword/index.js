@@ -3,10 +3,15 @@ import { Link } from "react-router-dom";
 import { FirebaseContext } from "../Firebase/";
 
 const ForgetPassword = (props) => {
+
   const firebase = useContext(FirebaseContext);
 
+  // * La const ici serviras a indiquer le succés de l'envoi de l'email a l'utilisateur pour reset le password .
   const [email, setEmail] = useState("");
+
   const [success, setSuccess] = useState(null);
+  
+  // * La const ici nous serviras a indiqué un message en cas d'erreur .
   const [error, setError] = useState(null);
 
   const handleSubmit = (e) => {
