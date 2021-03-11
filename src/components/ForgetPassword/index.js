@@ -10,7 +10,7 @@ const ForgetPassword = (props) => {
   const [email, setEmail] = useState("");
 
   const [success, setSuccess] = useState(null);
-  
+
   // * La const ici nous serviras a indiqué un message en cas d'erreur .
   const [error, setError] = useState(null);
 
@@ -24,7 +24,6 @@ const ForgetPassword = (props) => {
           `Consultez votre email ${email} pour changer le mot de passe`
         );
         setEmail("");
-
         setTimeout(() => {
           props.history.push("/login");
         }, 5000);
