@@ -3,6 +3,9 @@ import Levels from '../Levels';
 import ProgressBar from '../ProgressBar';
 
 class Quiz extends Component {
+  state = {
+
+  };
   render() {
     const { pseudo } = this.props.userData;
     return (
