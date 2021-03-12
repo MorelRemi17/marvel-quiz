@@ -4,8 +4,8 @@ import ProgressBar from '../ProgressBar';
 import {QuizMarvel} from '../quizMarvel';
 
 class Quiz extends Component {
-
-  // * On va ici définir notre state. 
+  // ! 20/22
+  // * On va ici définir notre state.
   state = {
     levelNames : ["debutant", "confirmer", "expert"],
     quizLevel : 0,
@@ -13,7 +13,9 @@ class Quiz extends Component {
     storedQuestions: [],
     question: null, 
     options: [],
-    idQuestion : 0
+    idQuestion : 0,
+    btnDisabled: true,
+    userAnswer: null
   };
 
   // * Cette méthode là va chercher les questions dans quizMarvel. newArray vas avoir pour fonction de prendre les questions sans importer les reponses pour eviter toute triche. this.setState vas mettre a jour le state dans notre composant de type class ( Quiz )
@@ -43,11 +45,17 @@ class Quiz extends Component {
     }
   }
 
+  submitAnswer = selectdAnswer => {
+    this.setState ({
+      userAnswer: selectdAnswer,
+      btnDisabled: false
+    })
+  }
   render() {
     const { pseudo } = this.props.userData;
     const displayOptions = this.state.options.map((option, index) => {
       return (
-        <p key={index} className="answerOptions">{option}</p>
+        <p key={index} className={`answerOptions ${this.state.userAnswer === option ? "selected": null}`} onClick={() => this.submitAnswer(option)}>{option}</p>
       )
     })
     return (
@@ -57,7 +65,7 @@ class Quiz extends Component {
         <ProgressBar />
         <h2 className="">{this.state.question}</h2>
         {displayOptions}
-        <button className="btnSubmit">Suivant</button>
+        <button disabled ={this.state.btnDisabled} className="btnSubmit">Suivant</button>
       </div>
     );
   }
