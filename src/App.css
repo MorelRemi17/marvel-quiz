@@ -142,9 +142,11 @@ main {
 /* TOASTIFY COLOR */
 .toastify-color-welcome {
   color: var(--black-color);
+  border-radius: 5px;
 }
 .toastify-color {
   color: var(--white-color);
+  border-radius: 5px;
 }
 /* END TOASTIFY COLOR */
 

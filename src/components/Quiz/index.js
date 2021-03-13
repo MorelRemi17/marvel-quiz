@@ -1,9 +1,12 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
+// =============== TOASTIFY IMP ===================
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
+// =============== COMPONENTS IMP ================
 import Levels from "../Levels";
 import ProgressBar from "../ProgressBar";
 import { QuizMarvel } from "../quizMarvel";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css'
+import QuizOver from "../QuizOver";
 
 toast.configure();
 
@@ -21,7 +24,8 @@ class Quiz extends Component {
     btnDisabled: true,
     userAnswer: null,
     score: 0,
-    showWelcomeMsg: false
+    showWelcomeMsg: false,
+    quizEnd: false,
   };
 
   // * ici on va enregister les questions et les réponses .
@@ -39,36 +43,35 @@ class Quiz extends Component {
       this.setState({
         storedQuestions: newArray,
       });
-    } else {
     }
   };
 
-  showWelcomeMsg = pseudo => {
+  showWelcomeMsg = (pseudo) => {
     if (!this.state.showWelcomeMsg) {
       this.setState({
-        showWelcomeMsg: true
-      })
-          toast.warn(`🦄 Welcome ${pseudo}! `, {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: false,
-      progress: undefined,
+        showWelcomeMsg: true,
+      });
+      toast.warn(`🦄 Welcome ${pseudo}! `, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
       });
     }
-
-  }
+  };
   componentDidMount() {
     this.loadQuestions(this.state.levelNames[this.state.quizLevel]);
   }
 
   nextQuestion = () => {
     if (this.state.idQuestion === this.state.maxQuestions - 1) {
+      this.gameOver();
     } else {
       this.setState((prevState) => ({
-        idQuestion: prevState.idQuestion,
+        idQuestion: prevState.idQuestion + 1,
       }));
     }
     const goodAnswer = this.storedDataRef.current[this.state.idQuestion].answer;
@@ -76,6 +79,27 @@ class Quiz extends Component {
       this.setState((prevState) => ({
         score: prevState.score + 1,
       }));
+      toast.success(`🦄 Bravo +1 🦄 `, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        bodyClassName: "toastify-color",
+      });
+    } else {
+      toast.error(`🦄 echec  0 🦄 `, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        bodyClassName: "toastify-color",
+      });
     }
   };
 
@@ -90,13 +114,13 @@ class Quiz extends Component {
       this.setState({
         question: this.state.storedQuestions[this.state.idQuestion].question,
         options: this.state.storedQuestions[this.state.idQuestion].options,
-        userAnswer: null, 
-        btnDisabled: true
+        userAnswer: null,
+        btnDisabled: true,
       });
     }
 
     if (this.props.userData.pseudo) {
-      this.showWelcomeMsg(this.props.userData.pseudo)
+      this.showWelcomeMsg(this.props.userData.pseudo);
     }
   }
 
@@ -106,6 +130,13 @@ class Quiz extends Component {
       btnDisabled: false,
     });
   };
+
+  gameOver = () => {
+    this.setState({
+      quizEnd: true,
+    });
+  };
+
   render() {
     // const { pseudo } = this.props.userData;
     const displayOptions = this.state.options.map((option, index) => {
@@ -121,8 +152,12 @@ class Quiz extends Component {
         </p>
       );
     });
-    return (
-      <div>
+
+    // * Si le quiz est fini j'affiche le compoentns QuiOver, sinon je continu les questions
+    return this.state.quizEnd ? (
+      <QuizOver />
+    ) : (
+      <Fragment>
         <Levels />
         <ProgressBar />
         <h2 className="">{this.state.question}</h2>
@@ -134,9 +169,9 @@ class Quiz extends Component {
         >
           Suivant
         </button>
-      </div>
+      </Fragment>
     );
-  }
-}
+  };
+};
 
 export default Quiz;
