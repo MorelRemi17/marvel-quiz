@@ -32,7 +32,7 @@ class Quiz extends Component {
   storedDataRef = React.createRef();
 
   // * Cette méthode là va chercher les questions dans quizMarvel. newArray vas avoir pour fonction de prendre les questions sans importer les reponses pour eviter toute triche. this.setState vas mettre a jour le state dans notre composant de type class ( Quiz )
-  loadQuestions = (quizz) => {
+  loadQuestions = quizz => {
     const fetchedArrayQuiz = QuizMarvel[0].quizz[quizz];
     if (fetchedArrayQuiz.length >= this.state.maxQuestions) {
       this.storedDataRef.current = fetchedArrayQuiz;
@@ -43,7 +43,6 @@ class Quiz extends Component {
       this.setState({
         storedQuestions: newArray,
       });
-    } else {
     }
   };
 
@@ -72,7 +71,7 @@ class Quiz extends Component {
       this.gameOver();
     } else {
       this.setState((prevState) => ({
-        idQuestion: prevState.idQuestion,
+        idQuestion: prevState.idQuestion +1
       }));
     }
     const goodAnswer = this.storedDataRef.current[this.state.idQuestion].answer;
