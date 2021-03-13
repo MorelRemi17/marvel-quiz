@@ -76,6 +76,27 @@ class Quiz extends Component {
       this.setState((prevState) => ({
         score: prevState.score + 1,
       }));
+      toast.success(`🦄 Bravo +1 🦄 `, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        bodyClassName: "toastify-color",
+        });
+    } else {
+      toast.error(`🦄 echec  0 🦄 `, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        bodyClassName: "toastify-color",
+        });
     }
   };
 
