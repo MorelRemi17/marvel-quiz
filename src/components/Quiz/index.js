@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import Levels from "../Levels";
 import ProgressBar from "../ProgressBar";
 import { QuizMarvel } from "../quizMarvel";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css'
+
+toast.configure();
 
 class Quiz extends Component {
   // ! 20/22
@@ -17,6 +21,7 @@ class Quiz extends Component {
     btnDisabled: true,
     userAnswer: null,
     score: 0,
+    showWelcomeMsg: false
   };
 
   // * ici on va enregister les questions et les réponses .
@@ -38,6 +43,23 @@ class Quiz extends Component {
     }
   };
 
+  showWelcomeMsg = pseudo => {
+    if (!this.state.showWelcomeMsg) {
+      this.setState({
+        showWelcomeMsg: true
+      })
+          toast.warn(`🦄 Welcome ${pseudo}! `, {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: false,
+      progress: undefined,
+      });
+    }
+
+  }
   componentDidMount() {
     this.loadQuestions(this.state.levelNames[this.state.quizLevel]);
   }
@@ -72,6 +94,10 @@ class Quiz extends Component {
         btnDisabled: true
       });
     }
+
+    if (this.props.userData.pseudo) {
+      this.showWelcomeMsg(this.props.userData.pseudo)
+    }
   }
 
   submitAnswer = (selectdAnswer) => {
@@ -81,7 +107,7 @@ class Quiz extends Component {
     });
   };
   render() {
-    const { pseudo } = this.props.userData;
+    // const { pseudo } = this.props.userData;
     const displayOptions = this.state.options.map((option, index) => {
       return (
         <p
@@ -97,7 +123,6 @@ class Quiz extends Component {
     });
     return (
       <div>
-        <h2>Bienvenu : {pseudo} </h2>
         <Levels />
         <ProgressBar />
         <h2 className="">{this.state.question}</h2>
