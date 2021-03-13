@@ -171,7 +171,7 @@ class Quiz extends Component {
         </button>
       </Fragment>
     );
-  }
-}
+  };
+};
 
 export default Quiz;
