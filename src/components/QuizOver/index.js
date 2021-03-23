@@ -34,7 +34,16 @@ const QuizOver = React.forwardRef((props, ref) => {
       </div>
       </Fragment>
     ) : (
-      <Fragment></Fragment>
+      <Fragment>
+        <div className="stepsBtnContainer">
+        <p className="successMsg">Fail!</p>
+      </div>
+
+      <div className="percentage">
+        <div className="progressPercent">Réussite {percent} % </div>
+        <div className="progressPercent"> Note {score}/{maxQuestions} ! </div>
+      </div>
+      </Fragment>
     );
   const questionAnswer = asked.map((question) => {
     return (
@@ -49,15 +58,6 @@ const QuizOver = React.forwardRef((props, ref) => {
   });
   return (
     <Fragment>
-{/*       <div className="stepsBtnContainer">
-        <p className="successMsg">Bravo !</p>{" "}
-        <button className="btnResult success">Niveau suivant </button>
-      </div>
-
-      <div className="percentage">
-        <div className="progressPercent">Réussite 10 % </div>
-        <div className="progressPercent"> Note 01/10 ! </div>
-      </div> */}
       {decision}
       <hr />
       <p> Les réponses aux questions posées :</p>
