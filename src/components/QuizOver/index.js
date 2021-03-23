@@ -45,7 +45,8 @@ const QuizOver = React.forwardRef((props, ref) => {
       </div>
       </Fragment>
     );
-  const questionAnswer = asked.map((question) => {
+     const questionAnswer = score >= averageGrade ? (
+      asked.map((question) => {
     return (
       <tr key={question.id}>
         <td>{question.question}</td>
@@ -54,8 +55,20 @@ const QuizOver = React.forwardRef((props, ref) => {
           <button className="btnInfo">Infos </button>
         </td>
       </tr>
-    );
-  });
+    )
+  })
+    )
+    :
+    (
+      <tr >
+        <td colSpan="3">
+          <p style={{textAlign: 'center', color: 'red'}}>
+            Pas de réponses 
+          </p>
+        </td>
+      </tr>
+    )
+ 
   return (
     <Fragment>
       {decision}
