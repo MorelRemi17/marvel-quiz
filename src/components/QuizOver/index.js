@@ -1,21 +1,24 @@
-import React, { Fragment , useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 const QuizOver = React.forwardRef((props, ref) => {
-  const [asked, setAsked] = useState([])
+  const { levelNames, score, maxQuestions, quizLevel, percent } = props;
+  const [asked, setAsked] = useState([]);
   useEffect(() => {
-    setAsked(ref.current)
+    setAsked(ref.current);
   }, [ref]);
-
-  const questionAnswer = asked.map( question => {
+  const averageGrade = maxQuestions / 2;
+  const decision = score >= averageGrade;
+  const questionAnswer = asked.map((question) => {
     return (
       <tr key={question.id}>
         <td>{question.question}</td>
         <td>{question.answer}</td>
-        <td><button className="btnInfo">Infos </button></td>
+        <td>
+          <button className="btnInfo">Infos </button>
+        </td>
       </tr>
- 
-    )
-  })
+    );
+  });
   return (
     <Fragment>
       <div className="stepsBtnContainer">
@@ -37,9 +40,7 @@ const QuizOver = React.forwardRef((props, ref) => {
               <th>Infos</th>
             </tr>
           </thead>
-          <tbody>
-            {questionAnswer}
-          </tbody>
+          <tbody>{questionAnswer}</tbody>
         </table>
       </div>
     </Fragment>
