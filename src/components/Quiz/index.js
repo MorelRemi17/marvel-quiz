@@ -154,8 +154,10 @@ class Quiz extends Component {
     });
 
     // * Si le quiz est fini j'affiche le compoentns QuiOver, sinon je continu les questions
-    return this.state.quizEnd ? (
-      <QuizOver />
+    return !this.state.quizEnd ? (
+      <QuizOver 
+      ref={this.storedDataRef}
+      />
     ) : (
       <Fragment>
         <Levels />
