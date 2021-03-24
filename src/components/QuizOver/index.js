@@ -18,7 +18,7 @@ const QuizOver = React.forwardRef((props, ref) => {
 
   const averageGrade = maxQuestions / 2;
 
-  //* Pour obliger la personne a recommencer le niveau si il n'a pas la moyenne.
+  // * Pour obliger la personne a recommencer le niveau si il n'a pas la moyenne.
   if (score < averageGrade) {
     setTimeout(() => {
       loadLevelQuestions(quizLevel);
