@@ -12,8 +12,11 @@ toast.configure();
 
 class Quiz extends Component {
   // ! 20/22
-  // * On va ici définir notre state.
-  state = {
+  
+  constructor(props) {
+  super(props)
+    // * On va ici définir notre state.
+  this.initialState = {
     levelNames: ["debutant", "confirmer", "expert"],
     quizLevel: 0,
     maxQuestions: 10,
@@ -27,26 +30,26 @@ class Quiz extends Component {
     showWelcomeMsg: false,
     quizEnd: false,
   };
-
-  // * ici on va enregister les questions et les réponses .
-  storedDataRef = React.createRef();
-
-  // * Cette méthode là va chercher les questions dans quizMarvel. newArray vas avoir pour fonction de prendre les questions sans importer les reponses pour eviter toute triche. this.setState vas mettre a jour le state dans notre composant de type class ( Quiz )
-  loadQuestions = (quizz) => {
-    const fetchedArrayQuiz = QuizMarvel[0].quizz[quizz];
-    if (fetchedArrayQuiz.length >= this.state.maxQuestions) {
-      this.storedDataRef.current = fetchedArrayQuiz;
-      const newArray = fetchedArrayQuiz.map(
-        ({ answer, ...keepRest }) => keepRest
-      );
-
-      this.setState({
-        storedQuestions: newArray,
-      });
-    }
+    this.state = this.initialState;
+      // * ici on va enregister les questions et les réponses .
+    this.storedDataRef = React.createRef();
   };
 
-  showWelcomeMsg = (pseudo) => {
+  // * Cette méthode là va chercher les questions dans quizMarvel. newArray vas avoir pour fonction de prendre les questions sans importer les reponses pour eviter toute triche. this.setState vas mettre a jour le state dans notre composant de type class ( Quiz )
+  loadQuestions = quizz => {
+    const fetchedArrayQuiz = QuizMarvel[0].quizz[quizz];
+    if (fetchedArrayQuiz.length >= this.state.maxQuestions) {
+
+        this.storedDataRef.current = fetchedArrayQuiz;
+
+        const newArray = fetchedArrayQuiz.map( ({ answer, ...keepRest}) => keepRest);
+
+        this.setState({ storedQuestions: newArray })
+
+    }
+}
+
+  showToastMsg = (pseudo) => {
     if (!this.state.showWelcomeMsg) {
       this.setState({
         showWelcomeMsg: true,
@@ -68,7 +71,8 @@ class Quiz extends Component {
 
   nextQuestion = () => {
     if (this.state.idQuestion === this.state.maxQuestions - 1) {
-      this.gameOver();
+      // this.gameOver();
+      this.setState({quizEnd:true})
     } else {
       this.setState((prevState) => ({
         idQuestion: prevState.idQuestion + 1,
@@ -104,13 +108,13 @@ class Quiz extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.storedQuestions !== prevState.storedQuestions) {
+    if ((this.state.storedQuestions !== prevState.storedQuestions) && this.state.storedQuestions.length) {
       this.setState({
         question: this.state.storedQuestions[this.state.idQuestion].question,
         options: this.state.storedQuestions[this.state.idQuestion].options,
       });
     }
-    if (this.state.idQuestion !== prevState.idQuestion) {
+    if ((this.state.idQuestion !== prevState.idQuestion) && this.state.storedQuestions.length) {
       this.setState({
         question: this.state.storedQuestions[this.state.idQuestion].question,
         options: this.state.storedQuestions[this.state.idQuestion].options,
@@ -119,8 +123,13 @@ class Quiz extends Component {
       });
     }
 
-    if (this.props.userData.pseudo) {
-      this.showWelcomeMsg(this.props.userData.pseudo);
+    if (this.state.quizEnd !== prevState.quizEnd) {
+      const gradepercent = this.getPercentage(this.state.maxQuestions, this.state.score);
+      this.gameOver(gradepercent);
+    }
+
+    if (this.props.userData.pseudo!== prevProps.userData.pseudo) {
+      this.showToastMsg(this.props.userData.pseudo);
     }
   }
 
@@ -131,22 +140,23 @@ class Quiz extends Component {
     });
   };
 
-  getPercent = ( maxQuest, ourScore) => (ourScore / maxQuest ) * 100 ; 
+  getPercentage = ( maxQuest, ourScore) => (ourScore / maxQuest ) * 100 ; 
 
-  gameOver = () => {
-    const gradepercent = this.getPercentage(this.state.maxQuestions, this.state.score);
-    if (gradepercent >= 50 ){
+  gameOver = percent => {
+
+    if (percent >= 50 ){
       this.setState({
         quizLevel: this.state.quizLevel +1,
-        percent : gradepercent, 
-        quizEnd : true
+        percent
       })
-    }else {
-      this.setState({
-        percent : gradepercent, 
-        quizEnd : true
-      })
+    } else {
+      this.setState({percent})
     }
+  };
+
+  loadLevelQuestions = param => {
+    this.setState({...this.initialState, quizLevel : param})
+    this.loadQuestions(this.state.levelNames[param]);  
   };
 
   render() {
@@ -174,10 +184,14 @@ class Quiz extends Component {
       maxQuestions={this.state.maxQuestions}
       quizLevel={this.state.quizLevel}
       percent= {this.state.percent}
+      loadLevelQuestions = {this.loadLevelQuestions}
       />
     ) : (
       <Fragment>
-        <Levels />
+        <Levels 
+        levelNames={this.state.levelNames}
+        quizLevel={this.state.quizLevel}
+        />
         <ProgressBar 
         idQuestion={this.state.idQuestion}
         maxQuestions={this.state.maxQuestions}
