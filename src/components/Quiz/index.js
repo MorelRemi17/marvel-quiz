@@ -12,8 +12,11 @@ toast.configure();
 
 class Quiz extends Component {
   // ! 20/22
-  // * On va ici définir notre state.
-  state = {
+  
+  constructor(props) {
+  super(props)
+    // * On va ici définir notre state.
+  this.initialState = {
     levelNames: ["debutant", "confirmer", "expert"],
     quizLevel: 0,
     maxQuestions: 10,
@@ -27,24 +30,24 @@ class Quiz extends Component {
     showWelcomeMsg: false,
     quizEnd: false,
   };
-
-  // * ici on va enregister les questions et les réponses .
-  storedDataRef = React.createRef();
+    this.state = this.initialState;
+      // * ici on va enregister les questions et les réponses .
+    this.storedDataRef = React.createRef();
+  };
 
   // * Cette méthode là va chercher les questions dans quizMarvel. newArray vas avoir pour fonction de prendre les questions sans importer les reponses pour eviter toute triche. this.setState vas mettre a jour le state dans notre composant de type class ( Quiz )
-  loadQuestions = (quizz) => {
+  loadQuestions = quizz => {
     const fetchedArrayQuiz = QuizMarvel[0].quizz[quizz];
     if (fetchedArrayQuiz.length >= this.state.maxQuestions) {
-      this.storedDataRef.current = fetchedArrayQuiz;
-      const newArray = fetchedArrayQuiz.map(
-        ({ answer, ...keepRest }) => keepRest
-      );
 
-      this.setState({
-        storedQuestions: newArray,
-      });
+        this.storedDataRef.current = fetchedArrayQuiz;
+
+        const newArray = fetchedArrayQuiz.map( ({ answer, ...keepRest}) => keepRest);
+
+        this.setState({ storedQuestions: newArray })
+
     }
-  };
+}
 
   showWelcomeMsg = (pseudo) => {
     if (!this.state.showWelcomeMsg) {
@@ -131,7 +134,7 @@ class Quiz extends Component {
     });
   };
 
-  getPercent = ( maxQuest, ourScore) => (ourScore / maxQuest ) * 100 ; 
+  getPercentage = ( maxQuest, ourScore) => (ourScore / maxQuest ) * 100 ; 
 
   gameOver = () => {
     const gradepercent = this.getPercentage(this.state.maxQuestions, this.state.score);
@@ -147,6 +150,11 @@ class Quiz extends Component {
         quizEnd : true
       })
     }
+  };
+
+  loadLevelQuestions = param => {
+    this.setState({...this.initialState, quizLevel : param})
+    this.loadQuestions(this.state.levelNames[param]);  
   };
 
   render() {
@@ -174,6 +182,7 @@ class Quiz extends Component {
       maxQuestions={this.state.maxQuestions}
       quizLevel={this.state.quizLevel}
       percent= {this.state.percent}
+      loadLevelQuestions = {this.loadLevelQuestions}
       />
     ) : (
       <Fragment>

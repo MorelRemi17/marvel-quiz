@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 
 const QuizOver = React.forwardRef((props, ref) => {
 
-  const { levelNames, score, maxQuestions, quizLevel, percent } = props;
+  const { levelNames, score, maxQuestions, quizLevel, percent, loadLevelQuestions } = props;
 
   const [asked, setAsked] = useState([]);
 
@@ -19,12 +19,12 @@ const QuizOver = React.forwardRef((props, ref) => {
         {quizLevel < levelNames.length ? (
           <Fragment>
             <p className="successMsg">Bravo, passez au niveau suivant !</p>
-            <button className="btnResult success">Niveau suivant </button>
+            <button className="btnResult success"  onClick={() => loadLevelQuestions(quizLevel)}>Niveau suivant </button>
           </Fragment>
         ) : (
           <Fragment>
             <p className="successMsg">Bravo !</p>
-            <button className="btnResult gameOver">Niveau suivant </button>
+            <button className="btnResult gameOver" onClick={() => loadLevelQuestions(0)}>Accueil </button>
           </Fragment>
         )}
         </div>
