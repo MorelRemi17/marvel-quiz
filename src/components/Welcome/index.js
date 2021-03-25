@@ -1,7 +1,8 @@
-import React, { Fragment, useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import firebaseContext from '../Firebase/context';
 import Logout from "../Logout";
-import Quiz from '../Quiz'
+import Quiz from '../Quiz';
+import Loader from '../Loader';
 
 const Welcome = props => {
 
@@ -42,10 +43,10 @@ const Welcome = props => {
 
   // * Si notre userSession est null dans ce cas là on va faire patienter la personne avec un loader si ça n'est pas le cas je return ma div avec mes composants.
   return userSession === null ? (
-    <Fragment>
-      <div className="loader"></div>
-      <p className="loaderText">Loading...</p>
-    </Fragment>
+    <Loader 
+    loadingMsg={"Loading "}
+    styling={{textAlign: 'center', color:'#FFF'}}
+    />
   ) : (
     <div className="quiz-bg">
       <div className="container">

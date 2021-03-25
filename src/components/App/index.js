@@ -11,6 +11,7 @@ import Login from '../Login';
 import Signup from '../Signup';
 import ErrorPage from '../ErrorPage';
 import ForgetPassword from '../ForgetPassword';
+import { IconContext } from "react-icons";
 
 
 // ============== Css import ================
@@ -19,6 +20,7 @@ import '../../App.css';
 function App() {
   return (
     <Router>
+      <IconContext.Provider value={{ style: { verticalAlign: 'middle' } }}>
       <Header />
       <Switch>
         <Route exact path="/" component={ Landing }/>
@@ -29,6 +31,7 @@ function App() {
         <Route component={ ErrorPage }/>
         </Switch>
       <Footer />
+      </IconContext.Provider>
     </Router>
   );
 };
