@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { GiTrophyCup } from 'react-icons/gi';
 import Loader from '../Loader';
+import Modal from '../Modal';
 
 const QuizOver = React.forwardRef((props, ref) => {
   const {
@@ -14,9 +15,21 @@ const QuizOver = React.forwardRef((props, ref) => {
 
   const [asked, setAsked] = useState([]);
 
+  // * On va ici créer un useState pour s'occuper de l'ouverture de notre modal.
+  const [openModal, setOpenModal] = useState(false);
+
   useEffect(() => {
     setAsked(ref.current);
   }, [ref]);
+
+ // * id ici correspond au héro que nous avons invoqué dans la question
+  const showModal = id => {
+    setOpenModal(true);
+  }
+
+  const hideModal = () => {
+    setOpenModal(false)
+  }
 
   const averageGrade = maxQuestions / 2;
 
@@ -87,7 +100,7 @@ const QuizOver = React.forwardRef((props, ref) => {
             <td>{question.question}</td>
             <td>{question.answer}</td>
             <td>
-              <button className="btnInfo">Infos </button>
+              <button className="btnInfo" onClick={() => showModal(question.heroId)}>Infos </button>
             </td>
           </tr>
         );
@@ -120,6 +133,17 @@ const QuizOver = React.forwardRef((props, ref) => {
           <tbody>{questionAnswer}</tbody>
         </table>
       </div>
+      <Modal showModal={openModal} hideModal={hideModal}>
+        <div className="modalHeader">
+
+        </div>
+        <div className="modalBody">
+
+        </div>
+        <div className="modalFooter">
+          <button className="modalBtn" onClick={hideModal}>Fermer </button>
+        </div>
+      </Modal>
     </Fragment>
   );
 });
