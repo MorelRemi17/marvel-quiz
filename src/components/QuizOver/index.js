@@ -15,6 +15,9 @@ const QuizOver = React.forwardRef((props, ref) => {
 
   const [asked, setAsked] = useState([]);
 
+  const API_PUBLIC_KEY = process.env.REACT_APP_MARVEL_API_KEY;
+  const hash = '959462d7eee55e467df6789a9c6d300e'; 
+
   // * On va ici créer un useState pour s'occuper de l'ouverture de notre modal.
   const [openModal, setOpenModal] = useState(false);
 
