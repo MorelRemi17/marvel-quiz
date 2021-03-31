@@ -26,27 +26,29 @@ const QuizOver = React.forwardRef((props, ref) => {
 
   useEffect(() => {
     setAsked(ref.current);
-    // * Vérification si on a notre key dans le localStorage 
-    if (localStorage.getItem('marvelStorageDate')) {
-      const date = localStorage.getItem('marvelStorageDate');
+    // * Vérification si on a notre key dans le localStorage
+    if (localStorage.getItem("marvelStorageDate")) {
+      const date = localStorage.getItem("marvelStorageDate");
       checkDataAge(date);
     }
   }, [ref]);
 
-  const checkDataAge = date => {
+  const checkDataAge = (date) => {
     const today = Date.now();
-    const timeDifference = today - date; 
+    const timeDifference = today - date;
 
     const daysDifference = timeDifference / (1000 * 3600 * 24);
+
     if (daysDifference >= 15) {
       localStorage.clear();
       localStorage.setItem("marvelStorageDate", Date.now());
     }
-  }
+  };
 
   // * id ici correspond au héro que nous avons invoqué dans la question. On va aussi faire nos appel a l'api ici via axios.
   const showModal = (id) => {
     setOpenModal(true);
+
     if (localStorage.getItem(id)) {
       setCharacterInfos(JSON.parse(localStorage.getItem(id)));
       setLoading(false);
@@ -58,8 +60,9 @@ const QuizOver = React.forwardRef((props, ref) => {
         .then((response) => {
           setCharacterInfos(response.data);
           setLoading(false);
+
           localStorage.setItem(id, JSON.stringify(response.data));
-          if (localStorage.getItem("marvelStorageDate")) {
+          if (!localStorage.getItem("marvelStorageDate")) {
             localStorage.setItem("marvelStorageDate", Date.now());
           }
         })
@@ -72,10 +75,10 @@ const QuizOver = React.forwardRef((props, ref) => {
     setLoading(true);
   };
 
-  // * Mettre la 1ere lettre des liens en capitale . 
-  const capitalizeFirestletter = string => {
+  // * Mettre la 1ere lettre des liens en capitale .
+  const capitalizeFirestletter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
-  }
+  };
 
   const averageGrade = maxQuestions / 2;
 
@@ -174,36 +177,50 @@ const QuizOver = React.forwardRef((props, ref) => {
       </div>
       <div className="modalBody">
         <div className="comicImage">
-          <img src={characterInfos.data.results[0].thumbnail.path+'.'+characterInfos.data.results[0].thumbnail.extension} 
-          alt={characterInfos.data.results[0].name} />
-          {characterInfos.attributionText}
+          <img
+            src={
+              characterInfos.data.results[0].thumbnail.path +
+              "." +
+              characterInfos.data.results[0].thumbnail.extension
+            }
+            alt={characterInfos.data.results[0].name}
+          />
+
+          <p>{characterInfos.attributionText}</p>
         </div>
-          <div className="comicDetails">
-            <h3>Description</h3>
-            {
-            characterInfos.data.results[0].description ? 
+        <div className="comicDetails">
+          <h3>Description</h3>
+          {characterInfos.data.results[0].description ? (
             <p>{characterInfos.data.results[0].description}</p>
-            : <p>Description indisponible ... </p>
-            }
-            <h3>Plus d'infos</h3>
-            {
-              characterInfos.data.results[0].urls &&
-              characterInfos.data.results[0].urls.map((url, index) => {
-                return <a key={index} href={url.url} target="_blank" rel= "noopener noreferrer">{capitalizeFirestletter(url.type)}</a>
-              })
-            }
-          </div>
+          ) : (
+            <p>Description indisponible ...</p>
+          )}
+          <h3>Plus d'infos</h3>
+          {characterInfos.data.results[0].urls &&
+            characterInfos.data.results[0].urls.map((url, index) => {
+              return (
+                <a
+                  key={index}
+                  href={url.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {capitalizeFirestletter(url.type)}
+                </a>
+              );
+            })}
+        </div>
       </div>
       <div className="modalFooter">
         <button className="modalBtn" onClick={hideModal}>
-          Fermer{" "}
+          Fermer
         </button>
       </div>
     </Fragment>
   ) : (
     <Fragment>
       <div className="modalHeader">
-        <h2>Réponse de Marvel... </h2>
+        <h2>Réponse de Marvel ...</h2>
       </div>
       <div className="modalBody">
         <Loader />
