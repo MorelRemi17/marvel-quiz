@@ -8,12 +8,12 @@ import 'firebase/firestore';
 
 
 const config = {
-  apiKey: "AIzaSyAs-T0XLo9NqBi2sVP6TRuHJ2NynL6zq4Y",
-  authDomain: "marvel-quiz-4e044.firebaseapp.com",
-  projectId: "marvel-quiz-4e044",
-  storageBucket: "marvel-quiz-4e044.appspot.com",
-  messagingSenderId: "1092810594055",
-  appId: "1:1092810594055:web:454ee4d4a3bd2fd34817a2"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
 // this.db = app.firestore(); j'invoque ici ma base de donnée via firestore
