@@ -26,20 +26,45 @@ const QuizOver = React.forwardRef((props, ref) => {
 
   useEffect(() => {
     setAsked(ref.current);
+    // * Vérification si on a notre key dans le localStorage 
+    if (localStorage.getItem('marvelStorageDate')) {
+      const date = localStorage.getItem('marvelStorageDate');
+      checkDataAge(date);
+    }
   }, [ref]);
+
+  const checkDataAge = date => {
+    const today = Date.now();
+    const timeDifference = today - date; 
+
+    const daysDifference = timeDifference / (1000 * 3600 * 24);
+    if (daysDifference >= 15) {
+      localStorage.clear();
+      localStorage.setItem("marvelStorageDate", Date.now());
+    }
+  }
 
   // * id ici correspond au héro que nous avons invoqué dans la question. On va aussi faire nos appel a l'api ici via axios.
   const showModal = (id) => {
     setOpenModal(true);
-    axios
-      .get(
-        `https://gateway.marvel.com/v1/public/characters/${id}?ts=1&apikey=${API_PUBLIC_KEY}&hash=${hash}`
-      )
-      .then((response) => {
-        setCharacterInfos(response.data);
-        setLoading(false);
-      })
-      .catch((err) => console.log(err));
+    if (localStorage.getItem(id)) {
+      setCharacterInfos(JSON.parse(localStorage.getItem(id)));
+      setLoading(false);
+    } else {
+      axios
+        .get(
+          `https://gateway.marvel.com/v1/public/characters/${id}?ts=1&apikey=${API_PUBLIC_KEY}&hash=${hash}`
+        )
+        .then((response) => {
+          setCharacterInfos(response.data);
+          setLoading(false);
+          localStorage.setItem(id, JSON.stringify(response.data));
+          if (localStorage.getItem("marvelStorageDate")) {
+            localStorage.setItem("marvelStorageDate", Date.now());
+          }
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   const hideModal = () => {
